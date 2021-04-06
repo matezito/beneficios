@@ -1,0 +1,13 @@
+span.discount{
+    display: block;
+}
+span.term-name-filter{
+    background:lightgray;
+    padding: .5% 1%;
+    cursor: pointer;
+}
+span.term-name-filter.active {
+    background: black;
+    color: white;
+   
+}

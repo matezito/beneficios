@@ -1,0 +1,16 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ .metabox-cat {
+    padding: 2% 0;
+}
+div#beneficio-fechas {
+    padding: 2% 0;
+}
+.date-field{
+    margin-bottom: 1%;
+}
+.remove-date{
+    cursor: pointer;
+}
