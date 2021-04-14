@@ -48,7 +48,7 @@ class Beneficios_Front
     {
         return get_terms([
             'taxonomy' => 'cat_beneficios',
-            'hide_empty' => 'true'
+            'hide_empty' => 'false'
         ]);
     }
 

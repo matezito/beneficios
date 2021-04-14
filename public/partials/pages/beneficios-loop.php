@@ -81,7 +81,7 @@
                                     <?php echo beneficios_front()->get_beneficio_by_user(wp_get_current_user()->ID,get_the_ID()) ? __('Solicitado', 'beneficios') : __('Solicitar', 'beneficios') ?>
                                 </button>
 
-                                <div id="dni-<?php echo get_the_ID()?>" class="dni-field" style="display: none;">
+                                <div id="dni-<?php echo get_the_ID()?>" class="dni-field w-100" style="display: none;">
                                 <?php echo __('Agrega tu DNI para solicitar el beneficio','beneficios')?><br />
                                     <p>
                                     <input type="number" name="dni-number" 

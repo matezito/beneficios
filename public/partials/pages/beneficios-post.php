@@ -23,12 +23,15 @@
                 <div class="row">
                     <div class="col-md-4 text-md-left text-center">
                         <span class="text-category text-uppercase d-block"><?php echo __('Beneficios Tiempo', 'beneficios') ?></span>
-                        <span class="title-category d-block font-italic text-secondary"><strong><?php
-                                                                                                $terms = wp_get_post_terms(get_the_ID(), 'cat_beneficios');
-                                                                                                foreach ($terms as $term) {
-                                                                                                    echo $term->name . ' ';
-                                                                                                }
-                                                                                                ?></strong></span>
+                        <span class="title-category d-block font-italic text-secondary"><strong>
+                        <?php
+                            $terms = wp_get_post_terms(get_the_ID(), 'cat_beneficios');
+                            foreach ($terms as $term) {
+                                echo $term->name . ' ';
+                            }
+                        ?>
+                        </strong>
+                        </span>
                     </div>
                     <div class="col-md-4 text-md-right text-center">
                         autor foto
