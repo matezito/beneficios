@@ -36,6 +36,7 @@ class Beneficios_Activator
 		add_action('init', [self::class, 'flush']);
 
 		self::create_beneficios_table();
+		self::create_email_options();
 	}
 	public static function flush()
 	{
@@ -50,6 +51,15 @@ class Beneficios_Activator
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . $table_name . ' ( `ID` INT NOT NULL AUTO_INCREMENT , `id_beneficio` INT NOT NULL , `date_hour` DATETIME NULL, `id_user` INT NOT NULL , `taken` INT NULL DEFAULT \'0\' , `taken_date` DATE NULL , PRIMARY KEY (`ID`)) ' . $charset_collate;
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
+	}
+
+	public static function create_email_options()
+	{
+		update_option('subject_automatico','Hola {{first_name}} ya puede usar tu beneficio:  {{beneficio_name}}',true);
+		update_option('mail_automatico','Hola {{first_name}} ya puede usar tu beneficio:  {{beneficio_name}}',true);
+
+		update_option('subject_sorteo','Hola {{first_name}}, beneficio {{beneficio_name}}',true);
+		update_option('mail_sorteo','Hola {{first_name}} ya estas inscripto para el sorteo del beneficio {{beneficio_name}}',true);
 	}
 
 	public static function page_exists($page_slug)

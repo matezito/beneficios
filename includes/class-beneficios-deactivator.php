@@ -34,6 +34,7 @@ class Beneficios_Deactivator
 	{
 		self::delete_some_options();
 		self::remove_tables();
+		self::remove_email();
 	}
 
 	public static function remove_tables()
@@ -50,5 +51,13 @@ class Beneficios_Deactivator
 			wp_delete_post(get_option('beneficios_loop_page'));
 			delete_option('beneficios_loop_page');
 		}
+	}
+
+	public static function remove_email()
+	{
+		delete_option('subject_automatico');
+		delete_option('mail_automatico');
+		delete_option('subject_sorteo');
+		delete_option('mail_sorteo');
 	}
 }
