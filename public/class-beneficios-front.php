@@ -225,6 +225,16 @@ class Beneficios_Front
 
             $insert = $wpdb->insert($wpdb->prefix . 'beneficios', ['id_beneficio' => $_POST['bene_id'], 'date_hour' => $_POST['date'] ,'id_user' => $_POST['user'], 'taken' => 0]);
             if ($insert) {
+                $type = get_post_meta($_POST['bene_id'],'_beneficio_type',true);
+                $user = get_userdata($_POST['user']);
+                if($type === 'automatico'){
+                    beneficios_options()->email_beneficio(get_option('subject_automatico'),get_option('mail_automatico'),$user->user_email, get_the_title($_POST['bene_id']));
+                }
+
+                if($type === 'sorteo'){
+                    beneficios_options()->email_beneficio(get_option('subject_sorteo'),get_option('mail_sorteo'),$user->user_email, get_the_title($_POST['bene_id']));
+                }
+
                 echo wp_send_json_success(__('Beneficio Agregado', 'beneficios'));
 
                 wp_die();
