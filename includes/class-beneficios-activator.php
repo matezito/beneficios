@@ -47,7 +47,7 @@ class Beneficios_Activator
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'beneficios';
 		$charset_collate = $wpdb->get_charset_collate();
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . $table_name . ' ( `ID` INT NOT NULL AUTO_INCREMENT , `id_beneficio` INT NOT NULL , `id_user` INT NOT NULL , `taken` INT NULL DEFAULT \'0\' , `taken_date` DATE NULL , PRIMARY KEY (`ID`)) ' . $charset_collate;
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . $table_name . ' ( `ID` INT NOT NULL AUTO_INCREMENT , `id_beneficio` INT NOT NULL , `date_hour` DATETIME NULL, `id_user` INT NOT NULL , `taken` INT NULL DEFAULT \'0\' , `taken_date` DATE NULL , PRIMARY KEY (`ID`)) ' . $charset_collate;
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 	}

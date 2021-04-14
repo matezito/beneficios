@@ -14,6 +14,8 @@ class Beneficios_Front
 
         add_action('wp_ajax_nopriv_' . $this->action, [$this, 'add_beneficio_ajax']);
         add_action('wp_ajax_' . $this->action, [$this, 'add_beneficio_ajax']);
+
+     
     }
     /**
      * Ajax script
@@ -53,8 +55,7 @@ class Beneficios_Front
     public function show_terms_name_by_post($post_id)
     {
         $terms = wp_get_post_terms($post_id, 'cat_beneficios');
-        foreach($terms as $term)
-        {
+        foreach ($terms as $term) {
             $category[] = $term->name;
         }
         return $category[0];
@@ -63,8 +64,7 @@ class Beneficios_Front
     public function show_terms_slug_by_post($post_id)
     {
         $terms = wp_get_post_terms($post_id, 'cat_beneficios',);
-        foreach($terms as $term)
-        {
+        foreach ($terms as $term) {
             $category[] = $term->slug;
         }
         return $category[0];
@@ -107,7 +107,7 @@ class Beneficios_Front
     {
         $args = [
             'post_type' => 'beneficios',
-            'numberposts' => 12,
+            'numberposts' => 1,
             'meta_query' => [
                 'relation' => 'AND',
                 [
@@ -129,14 +129,39 @@ class Beneficios_Front
         return $query;
     }
 
-    public function get_beneficio_by_user($user_id)
+    public function get_beneficio_by_user($user_id,$post_id)
     {
         global $wpdb;
-        $get_beneficio = $wpdb->get_results(
-            $wpdb->prepare('SELECT id_beneficio FROM '.$wpdb->prefix.'beneficios WHERE id_user=%d',$user_id),ARRAY_N
-        );
-        return $get_beneficio[0][0];
+        $get_beneficio = $wpdb->get_results('SELECT id_beneficio FROM ' . $wpdb->prefix . 'beneficios WHERE id_user='.$user_id.' AND id_beneficio='.$post_id, ARRAY_N);
+
+        if(sizeof($get_beneficio) === 0)
+            return false;
+        
+        return true;
     }
+    
+
+    public function get_beneficio_data($user_id,$post_id)
+    {
+        global $wpdb;
+        $beneficio = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'beneficios WHERE id_user='.$user_id.' AND id_beneficio='.$post_id );
+        
+        // if(!$beneficio === null)
+        //     return false;
+        
+        return $beneficio;
+    }
+
+    public function get_user_dni($user_id)
+    {
+        $dni = get_user_meta($user_id,'_user_dni',true);
+        if($dni === ''){
+            //return get_user_meta($user_id,'_user_dni',true);
+            return false;
+        }
+        return true;
+    }
+
     /**
      * ajax
      */
@@ -145,11 +170,15 @@ class Beneficios_Front
         $add_beneficio = isset($_POST['add_beneficio']) ? $_POST['add_beneficio'] : '';
         $bene_id = isset($_POST['bene_id']) ? $_POST['bene_id'] : '';
         $user = isset($_POST['user']) ? $_POST['user'] : '';
+        $date = isset($_POST['date']) ? $_POST['date'] : '';
+        $dni = isset($_POST['dni']) ? $_POST['dni'] : '';
 
         $fields = [
             'add_beneficio' => $add_beneficio,
             'bene_id' => $bene_id,
-            'user' => $user
+            'user' => $user,
+            'date' => $date,
+            'dni' => $dni
         ];
 
         return $this->beneficios_localize_script('ajax_add_beneficio', $fields);
@@ -157,13 +186,13 @@ class Beneficios_Front
 
     public function add_beneficio_ajax()
     {
-        if(isset($_POST['add_beneficio'])) {
+        if (isset($_POST['add_beneficio'])) {
             global $wpdb;
 
             $nonce = sanitize_text_field($_POST['_ajax_nonce']);
 
             if (!wp_verify_nonce($nonce, $this->nonce)) {
-                echo wp_send_json_error( __('No se pudo agregar el beneficio','beneficios') );
+                echo wp_send_json_error(__('No se pudo agregar el beneficio', 'beneficios'));
                 wp_die();
             }
 
@@ -171,31 +200,41 @@ class Beneficios_Front
                 echo wp_send_json_error(__('Inicia sesión para agregar este beneficio.', 'beneficios'));
                 wp_die();
             }
-        
-            if(!isset($_POST['bene_id'])) {
+
+            if (!isset($_POST['bene_id'])) {
                 echo wp_send_json_error(__('Este no es un beneficio.', 'beneficios'));
                 wp_die();
             }
 
+            if(!$this->get_user_dni($_POST['user'])){
+                if(!isset($_POST['dni'])){
+                    echo wp_send_json_error('001'); 
+                    wp_die(); 
+                } else {
+                    update_user_meta($_POST['user'],'_user_dni',$_POST['dni']);
+                }
+            }
+
             $get_beneficio = $wpdb->get_results(
-                $wpdb->prepare('SELECT id_user FROM '.$wpdb->prefix.'beneficios WHERE id_user=%d AND id_beneficio=%d',[$_POST['user'],$_POST['bene_id']])
+                $wpdb->prepare('SELECT id_user FROM ' . $wpdb->prefix . 'beneficios WHERE id_user=%d AND id_beneficio=%d', [$_POST['user'], $_POST['bene_id']])
             );
-            if(count($get_beneficio) !== 0){
+            if (count($get_beneficio) !== 0) {
                 echo wp_send_json_error(__('Ya estas incripto en este beneficio.', 'beneficios'));
                 wp_die();
             }
 
-            $insert = $wpdb->insert($wpdb->prefix.'beneficios',['id_beneficio' => $_POST['bene_id'], 'id_user' => $_POST['user'], 'taken' => 0]);
-            if($insert) {
-                echo wp_send_json_success(__('Beneficio Agregado','beneficios'));
-               
+            $insert = $wpdb->insert($wpdb->prefix . 'beneficios', ['id_beneficio' => $_POST['bene_id'], 'date_hour' => $_POST['date'] ,'id_user' => $_POST['user'], 'taken' => 0]);
+            if ($insert) {
+                echo wp_send_json_success(__('Beneficio Agregado', 'beneficios'));
+
                 wp_die();
             } else {
-                echo wp_send_json_error( __('Ocurrio un error','beneficios') );
+                echo wp_send_json_error(__('Ocurrio un error', 'beneficios'));
                 wp_die();
             }
         }
     }
+    
 }
 
 function beneficios_front()
