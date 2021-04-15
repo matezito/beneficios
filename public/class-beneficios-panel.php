@@ -22,10 +22,10 @@ class Beneficios_Panel
         return $get_beneficios;
     }
 
-    public function delete_beneficio($post_id)
+    public function delete_beneficio($post_id,$user_id)
     {
         global $wpdb;
-        $delete = $wpdb->delete($wpdb->prefix . 'beneficios',['ID' => $post_id],['%d']);
+        $delete = $wpdb->delete($wpdb->prefix . 'beneficios',['id_beneficio' => $post_id,'id_user' => $user_id],['%d','%d']);
         return $delete;
     }
 }
