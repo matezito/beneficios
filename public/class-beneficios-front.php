@@ -145,18 +145,29 @@ class Beneficios_Front
     {
         global $wpdb;
         $beneficio = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'beneficios WHERE id_user='.$user_id.' AND id_beneficio='.$post_id );
-        
-        // if(!$beneficio === null)
-        //     return false;
-        
+
         return $beneficio;
+    }
+
+    public function update_beneficio_user($id,$date)
+    {
+        global $wpdb;
+        $data = [
+            'taken' => 1,
+            'taken_date' => $date
+        ];
+        $where = [
+            'ID' => $id
+        ];
+
+        return $wpdb->update($wpdb->prefix . 'beneficios',$data,$where);
+
     }
 
     public function get_user_dni($user_id)
     {
         $dni = get_user_meta($user_id,'_user_dni',true);
         if($dni === ''){
-            //return get_user_meta($user_id,'_user_dni',true);
             return false;
         }
         return true;
@@ -228,6 +239,10 @@ class Beneficios_Front
                 $type = get_post_meta($_POST['bene_id'],'_beneficio_type',true);
                 $user = get_userdata($_POST['user']);
                 if($type === 'automatico'){
+                    $base = $this->get_beneficio_data($_POST['user'],$_POST['bene_id']);
+
+                    $this->update_beneficio_user($base->{'ID'},date('Y-m-d'));
+
                     beneficios_options()->email_beneficio(get_option('subject_automatico'),get_option('mail_automatico'),$user->user_email, get_the_title($_POST['bene_id']));
                 }
 
