@@ -107,5 +107,6 @@ class Beneficios_Public
 	{
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-beneficios-template.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-beneficios-front.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-beneficios-panel.php';
 	}
 }
