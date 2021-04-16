@@ -12,4 +12,5 @@
 		var id = $(this).data('id');
 		$(id).remove();
 	});
+
 })( jQuery );

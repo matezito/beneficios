@@ -14,3 +14,6 @@ div#beneficio-fechas {
 .remove-date{
     cursor: pointer;
 }
+#export-beneficios{
+    padding: 1% 0 0 0;
+}
