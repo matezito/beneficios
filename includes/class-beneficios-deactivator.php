@@ -35,7 +35,7 @@ class Beneficios_Deactivator
 		self::delete_some_options();
 		self::remove_tables();
 		self::remove_email();
-		add_action('wp_roles_init',[self::class,'permisions']);
+		add_action('admin_init',[self::class,'permisions']);
 	}
 
 	/**

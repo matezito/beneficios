@@ -38,7 +38,7 @@ class Beneficios_Activator
 		self::create_beneficios_table();
 		self::create_email_options();
 
-		add_action('wp_roles_init',[self::class,'permisions']);
+		add_action('admin_init',[self::class,'permisions']);
 	}
 	public static function flush()
 	{
