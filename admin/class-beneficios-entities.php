@@ -27,6 +27,8 @@ class Beneficios_Entities
         add_action('wp_ajax_' . $this->action, [$this, 'export_data_ajax']);
 
         add_action('admin_init',[$this,'export_donwload']);
+
+        
     }
 
     public function beneficios_admin_script()
@@ -170,7 +172,7 @@ class Beneficios_Entities
             'show_in_nav_menus' => true,
             'delete_with_user' => false,
             'exclude_from_search' => true,
-            'capability_type' => 'post',
+            'capability_type' => ['beneficio','beneficios'],
             'map_meta_cap' => true,
             'hierarchical' => false,
             'rewrite' => ['slug' => 'beneficios', 'with_front' => true],
@@ -209,6 +211,12 @@ class Beneficios_Entities
             'rest_base' => 'cat_beneficios',
             'rest_controller_class' => 'WP_REST_Terms_Controller',
             'show_in_quick_edit' => false,
+            'capabilities' => [
+                'manage_terms'  =>   'manage_cat_beneficios',
+                'edit_terms'    =>   'edit_cat_beneficios',
+                'delete_terms'  =>   'delete_cat_beneficios',
+                'assign_terms'  =>   'assign_cat_beneficios',
+            ],
         ];
         register_taxonomy('cat_beneficios', ['beneficios'], $args);
     }
@@ -300,6 +308,8 @@ class Beneficios_Entities
             }
         }
     }
+
+    
 }
 
 function benenficios()

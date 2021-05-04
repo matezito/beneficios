@@ -35,7 +35,33 @@ class Beneficios_Deactivator
 		self::delete_some_options();
 		self::remove_tables();
 		self::remove_email();
+		add_action('wp_roles_init',[self::class,'permisions']);
 	}
+
+	/**
+	 * caps
+	 */
+	public static function permisions()
+    {
+        $admin = get_role( 'administrator' );
+        
+        $admin_cap = [
+            'edit_beneficio',
+            'edit_beneficios',
+            'delete_beneficio',
+            'delete_beneficios',
+            'publish_beneficios',
+            'edit_published_beneficios',
+            'edit_cat_beneficios',
+            'manage_cat_beneficios',
+            'delete_cat_beneficios',
+            'assign_cat_beneficios'
+        ];
+
+        foreach( $admin_cap as $cap ) {
+            $admin->remove_cap($cap);
+        }
+    }
 
 	public static function remove_tables()
 	{
