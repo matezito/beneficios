@@ -4,15 +4,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Beneficios 1.2.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/beneficios\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: \n"
+"Language-Team: Español\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-05-26T17:33:12-03:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"PO-Revision-Date: 2021-05-26 20:33+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Domain: beneficios\n"
+"\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.5.2; wp-5.7.2"
 
 #. Plugin Name of the plugin
 #: admin/class-beneficios-entities.php:156
@@ -29,7 +33,9 @@ msgid "https://genosha.com.ar"
 msgstr ""
 
 #. Description of the plugin
-msgid "This is a short description of what the plugin does. It's displayed in the WordPress admin area."
+msgid ""
+"This is a short description of what the plugin does. It's displayed in the "
+"WordPress admin area."
 msgstr ""
 
 #. Author of the plugin
@@ -64,8 +70,7 @@ msgstr ""
 msgid "Categoría Beneficio"
 msgstr ""
 
-#: admin/class-beneficios-metabox.php:23
-#: admin/class-beneficios-metabox.php:33
+#: admin/class-beneficios-metabox.php:23 admin/class-beneficios-metabox.php:33
 #: admin/class-beneficios-metabox.php:35
 msgid "¿Activa?"
 msgstr ""
