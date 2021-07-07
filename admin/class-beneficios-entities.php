@@ -259,6 +259,7 @@ class Beneficios_Entities
         header('Content-Length: ' . filesize($log_file_data));
         header("Content-Type: text/plain");
         readfile($log_file_data);
+        exit();
     }
 
     public function export_donwload()
