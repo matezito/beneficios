@@ -12,7 +12,7 @@ class Beneficios_Metabox
         add_filter('manage_cat_beneficios_custom_column', [$this, 'colum_cat_columns'], 10, 3);
         add_filter('manage_edit-cat_beneficios_columns', [$this, 'cat_beneficio_columns']);
 
-        add_action('add_meta_boxes', [$this, 'add_metabox']);
+        add_action('add_meta_boxes', [$this, 'add_metabox_beneficios']);
         add_action('save_post_beneficios', [$this, 'save_beneficios']);
     }
     /** 
@@ -78,13 +78,13 @@ class Beneficios_Metabox
     /**
      * Beneficios metabox
      */
-    public function add_metabox()
+    public function add_metabox_beneficios()
     {
         add_meta_box(
             'beneficios-metabox',
             __('Opciones', 'beneficios'),
-            array($this, 'form_metabox'),
-            'beneficios',
+            [$this,'form_metabox'],
+            ['beneficios'],
             'advanced',
             'default'
         );
@@ -93,13 +93,16 @@ class Beneficios_Metabox
     public function form_metabox($post)
     {
 
+        $post_id = $_GET['post'];
+
         wp_nonce_field('beneficios_nonce_action', 'beneficios_nonce');
-        $active = get_post_meta($post->ID,'_active',true);
-        $type = get_post_meta($post->ID, '_beneficio_type', true);
-        $finish = get_post_meta($post->ID,'_finish',true);
-        $feature = get_post_meta($post->ID,'_feature',true);
-        $dates = get_post_meta($post->ID,'_beneficio_date',true);
-        $discount = get_post_meta($post->ID,'_beneficio_discount',true);
+
+        $active = get_post_meta($post_id,'_active',true);
+        $type = get_post_meta($post_id, '_beneficio_type', true);
+        $finish = get_post_meta($post_id,'_finish',true);
+        $feature = get_post_meta($post_id,'_feature',true);
+        $dates = get_post_meta($post_id,'_beneficio_date',true);
+        $discount = get_post_meta($post_id,'_beneficio_discount',true);
 
         $form = '<table class="form-table">';
         $form .= '<tr>
@@ -121,7 +124,6 @@ class Beneficios_Metabox
                 <td><button type="button" class="components-button is-primary" id="add_fecha">'.__('Agregar fecha y hora','beneficios').'</button><div id="beneficio-fechas">';
                 if($dates && count($dates) > 0) {
                     foreach($dates as $key => $value) {
-                        echo $key;
                         $form .= '<div id="_date_'.$key.'"> <input type="datetime-local" class="regular-text date-field" name="_beneficio_date[]" value="'.$value.'" /> <span class="remove-date dashicons dashicons-trash" data-id="#_date_'.$key.'"></span></div>';
                     }
                 }
