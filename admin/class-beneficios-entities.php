@@ -26,9 +26,7 @@ class Beneficios_Entities
         add_action('wp_ajax_nopriv_' . $this->action, [$this, 'export_data_ajax']);
         add_action('wp_ajax_' . $this->action, [$this, 'export_data_ajax']);
 
-        add_action('admin_init',[$this,'export_donwload']);
-
-        
+        add_action('admin_init', [$this, 'export_donwload']);
     }
 
     public function beneficios_admin_script()
@@ -115,7 +113,7 @@ class Beneficios_Entities
      */
     public function beneficios_callback()
     {
-       return true;
+        return true;
     }
     /**
      * Submenu
@@ -172,7 +170,7 @@ class Beneficios_Entities
             'show_in_nav_menus' => true,
             'delete_with_user' => false,
             'exclude_from_search' => true,
-            'capability_type' => ['beneficio','beneficios'],
+            'capability_type' => ['beneficio', 'beneficios'],
             'map_meta_cap' => true,
             'hierarchical' => false,
             'rewrite' => ['slug' => 'beneficios', 'with_front' => true],
@@ -236,7 +234,7 @@ class Beneficios_Entities
         </div>';
     }
 
-    public function generate_file($name_prefix,$content)
+    public function generate_file($name_prefix, $content)
     {
         $log_filename = plugin_dir_path(dirname(__FILE__)) . "/admin/export";
 
@@ -246,13 +244,13 @@ class Beneficios_Entities
 
         $name = $name_prefix . date('d-M-Y-H-m-i') . '.txt';
         $log_file_data = $log_filename . '/' . $name;
-        
+
         $txt = fopen($log_file_data, "w") or die("Unable to open file!");
         fwrite($txt, $content);
         fclose($txt);
 
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename='.basename($log_file_data));
+        header('Content-Disposition: attachment; filename=' . basename($log_file_data));
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
@@ -265,43 +263,32 @@ class Beneficios_Entities
     public function export_donwload()
     {
         if (isset($_POST['from-benenficio']) && isset($_POST['to-benenficio']) && isset($_POST['export-button-beneficios'])) {
-            if(!empty($_POST['from-benenficio']) && !empty($_POST['to-benenficio'])) {
+            if (!empty($_POST['from-benenficio']) && !empty($_POST['to-benenficio'])) {
 
                 global $wpdb;
 
-                $args = [
-                    'post_type' => 'beneficios',
-                    'date_query' => array(
-                        array(
-                            'after'     => $_POST['from-benenficio'],
-                            'before'    => $_POST['to-benenficio'],
-                            'inclusive' => true,
-                        ),
-                    ),
-                ];
-
-                $query = get_posts($args);
+                $get_beneficios = $wpdb->get_results('SELECT id_beneficio,taken FROM ' . $wpdb->prefix . 'beneficios WHERE DATE(taken_date) >= "' . $_POST['from-benenficio'] . '" AND DATE(taken_date) <= "' . $_POST['to-benenficio'] . '" GROUP BY id_beneficio');
 
                 $content = '';
 
-               foreach($query as $q) {
-         
-                   $content .= PHP_EOL.strtoupper($q->{'post_title'}).PHP_EOL;
-                   $content .= '-----------------------------' .PHP_EOL;
-                   
-                   $line = $wpdb->get_results( 'SELECT * FROM '.$wpdb->prefix.'beneficios WHERE id_beneficio = '.$q->{'ID'} );
+                foreach ($get_beneficios as $beneficio) {
 
-                   foreach($line as $l) {
-                       $user = get_user_by('id',$l->{'id_user'});
-                       $content .= $user->first_name. ' ' .$user->last_name. ' DNI: ' .get_user_meta($l->{'id_user'},'_user_dni',true). ' ';
-                       if($l->{'date_hour'}){
-                           $content .= 'Día y hora: '.$l->{'date_hour'}.PHP_EOL;
-                       }
-                       $content .= PHP_EOL;
-                   }
-               }
-               
-                $this->generate_file('export_',$content);
+                    $content .= PHP_EOL . strtoupper(get_post($beneficio->id_beneficio)->post_title) . PHP_EOL;
+                    $content .= '-----------------------------' . PHP_EOL;
+
+                    $get_users = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'beneficios WHERE id_beneficio = ' . $beneficio->id_beneficio);
+
+                    foreach ($get_users as $user) {
+                        $userData = get_user_by('id', $user->id_user);
+                        $content .= $userData->first_name . ' ' . $userData->last_name . ' DNI: ' . get_user_meta($userData->ID, '_user_dni', true) . ' ';
+                           if($user->date_hour){
+                               $content .= 'Día y hora: '.$user->date_hour.PHP_EOL;
+                           }
+                        $content .= PHP_EOL;
+                    }
+                }
+
+                $this->generate_file('export_', $content);
             } else {
                 echo '<div class="notice notice-error is-dismissible">
                             <p>Las fechas no pueden estar vacias.</p>
@@ -309,8 +296,6 @@ class Beneficios_Entities
             }
         }
     }
-
-    
 }
 
 function benenficios()
