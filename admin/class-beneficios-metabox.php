@@ -93,7 +93,7 @@ class Beneficios_Metabox
     public function form_metabox($post)
     {
 
-        $post_id = $_GET['post'];
+        $post_id = $_GET['post']; //TODO:fix this
 
         wp_nonce_field('beneficios_nonce_action', 'beneficios_nonce');
 
@@ -104,24 +104,24 @@ class Beneficios_Metabox
         $dates = get_post_meta($post_id,'_beneficio_date',true);
         $discount = get_post_meta($post_id,'_beneficio_discount',true);
 
-        $form = '<table class="form-table">';
+        $form = '<table class="table-metabox">';
         $form .= '<tr>
             <th scope="row">'.__('¿Beneficio activo?','beneficios').'</th>
-            <td><input type="checkbox" name="active" '.checked('1',$active,false).'  /></td>
+            <td class="beneficio-field"><input type="checkbox" name="active" '.checked('1',$active,false).'  /></td>
             <th scope="row">' . __('Tipo', 'beneficios') . '</th>
-            <td><select name="type" class="regular-text">
+            <td class="beneficio-field"><select name="type" class="regular-text">
                 <option value="">' . __('-seleccionar-', 'beneficios') . '</option>
                 <option value="automatico" ' . selected($type, 'automatico', false) . '>' . __('Automatico', 'beneficios') . '</option>
                 <option value="sorteo" ' . selected($type, 'sorteo', false) . '>' . __('Por Sorteo', 'beneficios') . '</option>
             </select></td>
             <th scope="row">'.__('Caduca','beneficios').'</th>
-            <td><input type="date" name="_finish" class="regular-text" value="'.$finish.'" /></td>
+            <td class="beneficio-field"><input type="date" name="_finish" class="regular-text" value="'.$finish.'" /></td>
         </tr>';
         $form .= '<tr>
                 <th style="vertical-align:top" scope="row">'.__('Destacado','beneficios').'</th>
-                <td style="vertical-align:top"><input type="checkbox" name="_feature" '.checked( '1',$feature,false ).' /> </td>
+                <td style="vertical-align:top" class="beneficio-field"><input type="checkbox" name="_feature" '.checked( '1',$feature,false ).' /> </td>
                 <th scope="row">'.__('Fechas','beneficios').'</th>
-                <td><button type="button" class="components-button is-primary" id="add_fecha">'.__('Agregar fecha y hora','beneficios').'</button><div id="beneficio-fechas">';
+                <td class="beneficio-field"><button type="button" class="components-button is-primary" id="add_fecha">'.__('Agregar fecha y hora','beneficios').'</button><div id="beneficio-fechas">';
                 if($dates && count($dates) > 0) {
                     foreach($dates as $key => $value) {
                         $form .= '<div id="_date_'.$key.'"> <input type="datetime-local" class="regular-text date-field" name="_beneficio_date[]" value="'.$value.'" /> <span class="remove-date dashicons dashicons-trash" data-id="#_date_'.$key.'"></span></div>';
@@ -132,7 +132,7 @@ class Beneficios_Metabox
             </tr>';
         $form .= '<tr>
                 <th scope="row">'.__('Texto descuento','beneficios').'</th>
-                <td><input type="text" class="regular-text" name="_beneficio_discount" value="'.$discount.'" /></td>
+                <td class="beneficio-field"><input type="text" class="regular-text" name="_beneficio_discount" value="'.$discount.'" /></td>
         </tr>';
         $form .= '</table>';
         echo $form;
