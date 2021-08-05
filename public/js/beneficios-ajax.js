@@ -7,7 +7,7 @@
     });
 
     $(document).on('click','.solicitar',function(){
-        var date = $('.select-dates').val();
+        var date = $('.select-dates:checked').val();
         var bene_id = $(this).data('id');
         var user = $(this).data('user');
         

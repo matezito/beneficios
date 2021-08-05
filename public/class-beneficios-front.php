@@ -153,8 +153,21 @@ class Beneficios_Front
     {
         global $wpdb;
         $data = [
-            'taken' => 1,
             'taken_date' => $date
+        ];
+        $where = [
+            'ID' => $id
+        ];
+
+        return $wpdb->update($wpdb->prefix . 'beneficios',$data,$where);
+
+    }
+
+    public function taken_beneficio($id,$taken)
+    {
+        global $wpdb;
+        $data = [
+            'taken' => $taken
         ];
         $where = [
             'ID' => $id
@@ -238,15 +251,18 @@ class Beneficios_Front
             if ($insert) {
                 $type = get_post_meta($_POST['bene_id'],'_beneficio_type',true);
                 $user = get_userdata($_POST['user']);
-                if($type === 'automatico'){
-                    $base = $this->get_beneficio_data($_POST['user'],$_POST['bene_id']);
+
+                $base = $this->get_beneficio_data($_POST['user'],$_POST['bene_id']);
 
                     $this->update_beneficio_user($base->{'ID'},date('Y-m-d'));
-
+                if($type === 'automatico'){
+                    
+                    $this->taken_beneficio($base->{'ID'},1);
                     beneficios_options()->email_beneficio(get_option('subject_automatico'),get_option('mail_automatico'),$user->user_email, get_the_title($_POST['bene_id']));
                 }
 
                 if($type === 'sorteo'){
+                    $this->taken_beneficio($base->{'ID'},0);
                     beneficios_options()->email_beneficio(get_option('subject_sorteo'),get_option('mail_sorteo'),$user->user_email, get_the_title($_POST['bene_id']));
                 }
 
