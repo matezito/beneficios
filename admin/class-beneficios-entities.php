@@ -282,7 +282,8 @@ class Beneficios_Entities
                         $userData = get_user_by('id', $user->id_user);
                         $content .= $userData->first_name . ' ' . $userData->last_name . ' DNI: ' . get_user_meta($userData->ID, '_user_dni', true) . ' ';
                            if($user->date_hour){
-                               $content .= 'Día y hora: '.$user->date_hour.PHP_EOL;
+                               $content .= PHP_EOL.'Día y hora elegida: '.$user->date_hour.PHP_EOL;
+                               $content .= 'Solicitado el día: '.$user->taken_date.PHP_EOL;
                            }
                         $content .= PHP_EOL;
                     }
