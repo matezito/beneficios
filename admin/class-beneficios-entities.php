@@ -27,6 +27,7 @@ class Beneficios_Entities
         add_action('wp_ajax_' . $this->action, [$this, 'export_data_ajax']);
 
         add_action('admin_init', [$this, 'export_donwload']);
+
     }
 
     public function beneficios_admin_script()
@@ -40,13 +41,14 @@ class Beneficios_Entities
         $fields = [
             'url'    => $this->url,
             '_ajax_nonce'  => wp_create_nonce($this->nonce),
-            'action' => $this->action
+            'action' => $this->action,
         ];
 
         $fields = array_merge($fields, $data);
 
         wp_localize_script('beneficios_ajax_admin_script', $var_data, $fields);
     }
+
 
     public function export_vars()
     {
@@ -203,7 +205,7 @@ class Beneficios_Entities
             'show_in_menu' => true,
             'show_in_nav_menus' => true,
             'query_var' => true,
-            'rewrite' => ['slug' => 'categoria-beneficios', 'with_front' => true,],
+            'rewrite' => ['slug' => 'categoria-beneficios', 'with_front' => true],
             'show_admin_column' => false,
             'show_in_rest' => true,
             'rest_base' => 'cat_beneficios',
@@ -281,10 +283,11 @@ class Beneficios_Entities
                     foreach ($get_users as $user) {
                         $userData = get_user_by('id', $user->id_user);
                         $content .= $userData->first_name . ' ' . $userData->last_name . ' DNI: ' . get_user_meta($userData->ID, '_user_dni', true) . ' ';
-                           if($user->date_hour){
-                               $content .= PHP_EOL.'Día y hora elegida: '.$user->date_hour.PHP_EOL;
-                               $content .= 'Solicitado el día: '.$user->taken_date.PHP_EOL;
-                           }
+                        if ($user->date_hour) {
+                            $content .= ' | Día y hora elegida: ' . $user->date_hour;
+                            
+                        }
+                        $content .= ' | Solicitado el día: ' . $user->taken_date . PHP_EOL;
                         $content .= PHP_EOL;
                     }
                 }
@@ -297,6 +300,7 @@ class Beneficios_Entities
             }
         }
     }
+
 }
 
 function benenficios()

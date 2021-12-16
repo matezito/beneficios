@@ -1,10 +1,8 @@
 (function($){
-    $(document).ready(function(){
-        $('.select-dates').on('click',function(){
-            var btn = $(this).data('button');
-            $(btn).attr('disabled',false);
-        });
-    });
+    $(document).on('click', '.select-dates', function() {
+        var btn = $(this).data('button');
+        $(btn).attr('disabled',false);
+    })
 
     $(document).on('click','.solicitar',function(){
         var date = $('.select-dates:checked').val();

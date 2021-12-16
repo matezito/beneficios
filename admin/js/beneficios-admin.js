@@ -1,4 +1,5 @@
 (function( $ ) {
+
 	$(document).ready(function() {
 		var i = 10;
 		$('#add_fecha').on('click', function() {
@@ -12,5 +13,6 @@
 		var id = $(this).data('id');
 		$(id).remove();
 	});
+
 
 })( jQuery );
