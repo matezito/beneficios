@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Beneficios
  * Plugin URI:        https://genosha.com.ar
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Esta es la descripción corta del plugin. Le podemos agregar algo mas.
  * Version:           1.3.2
  * Author:            Juan Iriart
  * Author URI:        https://genosha.com.ar
